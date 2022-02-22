@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<WarningsAsErrors>CS8600;CS8602;CS8603;CS8613;CS8601;CS8625;CS8604;CS8618;CS8777</WarningsAsErrors>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.2.20" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.18" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.18" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.18" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.18" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\SamShips.Domain\SamShips.Domain.csproj" />
+	</ItemGroup>
+	
+</Project>

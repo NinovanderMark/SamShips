@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  SamShipsTable:
+    Type: AWS::Serverless::SimpleTable
+  SamShipsWebAPI:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Handler: SamShips.WebAPI::SamShips.WebAPI.LambdaEntryPoint::FunctionHandlerAsync
+      CodeUri: ./artifacts/SamShips.WebAPI.zip
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref SamShipsTable
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        GetShipsResource:
+          Type: Api
+          Properties: 
+            Path: /ships
+            Method: get
+        PostShipsResource:
+          Type: Api
+          Properties:
+            Path: /ships
+            Method: post
+        Ship:
+          Type: Api
+          Properties:
+            Path: /ships/{id}
+            Method: any
+  SamShipsHeartbeat:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: dotnetcore3.1
+      Handler: SamShips.Heartbeat::SamShips.Heartbeat.Entrypoint::Handler
+      CodeUri: ./artifacts/SamShips.Heartbeat.zip
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref SamShipsTable
+      Policies: AmazonDynamoDBFullAccess
+      # Events:
+      #   MySchedule:
+      #     Type: Schedule
+      #     Properties:
+      #       Schedule: rate(1 minute)
