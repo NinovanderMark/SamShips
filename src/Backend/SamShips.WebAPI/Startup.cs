@@ -69,7 +69,13 @@ namespace SamShips.WebAPI
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors();
+            app.UseCors(builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -14,7 +14,7 @@ import { Orders } from './orders';
 import { Region } from './region';
 import { ShipClass } from './shipClass';
 
-export type Ship = { 
+export class Ship { 
     id?: string;
     name?: string;
     class?: ShipClass;

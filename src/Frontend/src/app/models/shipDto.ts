@@ -12,7 +12,7 @@
 import { Region } from './region';
 import { ShipClass } from './shipClass';
 
-export type ShipDto = { 
+export class ShipDto { 
     name?: string;
     class?: ShipClass;
     location?: Region;

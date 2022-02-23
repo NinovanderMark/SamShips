@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+export const Regions = ['Africa', 'Antarctica', 'Asia', 'Australia', 'Europe', 'NorthAmerica', 'SouthAmerica'] as const;
 export type Region = 'Africa' | 'Antarctica' | 'Asia' | 'Australia' | 'Europe' | 'NorthAmerica' | 'SouthAmerica';
 
 export const Region = {

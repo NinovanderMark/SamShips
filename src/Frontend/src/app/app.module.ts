@@ -12,6 +12,8 @@ import { WorldViewComponent } from './components/pages/world-view/world-view.com
 import { MyShipsComponent } from './components/pages/my-ships/my-ships.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/pages/home/home.component';
+import { ShipCreateComponent } from './components/ship-create/ship-create.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,12 +24,14 @@ import { HomeComponent } from './components/pages/home/home.component';
     WorldViewComponent,
     MyShipsComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    ShipCreateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule,
     NgbModule
   ],
   providers: [],

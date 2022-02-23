@@ -1,6 +1,15 @@
 <div class="container panel">
     <h1>My Ships</h1>
-    <app-ship-list></app-ship-list>
-    <app-ship-detail></app-ship-detail>
+    <div class="row">
+        <div class="col-md-3">
+            <app-ship-list></app-ship-list>
+        </div>
+        <div class="col">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    
+    <a [routerLink]="'create'">Create</a><br/>
+    <a [routerLink]="'detail'">Detail</a>
 </div>
 

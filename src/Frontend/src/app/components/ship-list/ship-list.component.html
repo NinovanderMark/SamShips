@@ -1,1 +1,12 @@
-<p>ship-list works!</p>
+<ul class="card-list-small">
+    <li *ngFor="let ship of shipList" class="ship-card-small">
+        <img *ngIf="ship.class === 'Small'" src="/assets/small.png">
+        <img *ngIf="ship.class === 'Medium'" src="/assets/medium.png">
+        <img *ngIf="ship.class === 'Large'" src="/assets/large.png">
+        <h3>{{ship.name}}</h3>
+    </li>
+    <li class="ship-card-small">
+        <img src="/assets/unknown.png">
+        <a [routerLink]="'create'">Create new ship</a><br/>
+    </li>
+</ul>

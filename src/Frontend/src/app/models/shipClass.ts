@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+export const ShipClasses = ['Small', 'Medium', 'Large'] as const;
 export type ShipClass = 'Small' | 'Medium' | 'Large';
 
 export const ShipClass = {

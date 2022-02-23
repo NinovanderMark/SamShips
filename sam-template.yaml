@@ -16,17 +16,12 @@ Resources:
           TABLE_NAME: !Ref SamShipsTable
       Policies: AmazonDynamoDBFullAccess
       Events:
-        GetShipsResource:
+        Ships:
           Type: Api
           Properties: 
             Path: /ships
-            Method: get
-        PostShipsResource:
-          Type: Api
-          Properties:
-            Path: /ships
-            Method: post
-        Ship:
+            Method: any
+        SingleShip:
           Type: Api
           Properties:
             Path: /ships/{id}

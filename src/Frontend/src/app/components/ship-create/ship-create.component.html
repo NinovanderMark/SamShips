@@ -1,0 +1,26 @@
+<h2>Create ship</h2>
+
+<form [formGroup]="createForm" (ngSubmit)="createShip()">
+	<div class="mb-3">
+		<label for="form-name-control" class="form-label">Ship name</label>
+		<input class="form-control" type="text" id="form-name-control" formControlName="nameControl">
+	</div>
+
+	<div class="mb-3">
+		<label for="exampleFormControlInput1" class="form-label">Class</label>
+		<select class="form-control" id="form-type-control" formControlName="typeControl">
+			<option *ngFor="let type of shipClasses" [value]="type">{{type}}</option>
+		</select>
+	</div>
+
+	<div class="mb-3">
+		<label for="exampleFormControlInput1" class="form-label">Location</label>
+		<select class="form-control" id="form-location-control" formControlName="locationControl">
+			<option *ngFor="let type of regions" [value]="type">{{type}}</option>
+		</select>
+	</div>
+
+	<div class="mb-3">
+		<button type="submit" class="btn btn-primary mb-3" [disabled]="!createForm.valid">Create Ship</button>
+	</div>
+</form>

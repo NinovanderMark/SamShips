@@ -8,7 +8,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Handler: SamShips.WebAPI::SamShips.WebAPI.LambdaEntryPoint::FunctionHandlerAsync
-      CodeUri: s3://nino-aws-learning-bucket/d76c09e89491708207a172a5077d257b
+      CodeUri: s3://nino-aws-learning-bucket/9053e27adb2b79af7d1b83245a608a2d
       MemorySize: 256
       Timeout: 30
       Environment:
@@ -17,17 +17,12 @@ Resources:
             Ref: SamShipsTable
       Policies: AmazonDynamoDBFullAccess
       Events:
-        GetShipsResource:
+        Ships:
           Type: Api
           Properties:
             Path: /ships
-            Method: get
-        PostShipsResource:
-          Type: Api
-          Properties:
-            Path: /ships
-            Method: post
-        Ship:
+            Method: any
+        SingleShip:
           Type: Api
           Properties:
             Path: /ships/{id}
