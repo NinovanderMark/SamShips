@@ -1,0 +1,85 @@
+
+body {
+	margin: auto;
+	padding: 0;
+	background: #efefef;
+}
+
+header {
+    background-color: #f8f9fa;
+    box-shadow: 2px 4px 4px rgba(0,0,0,0.2);
+}
+
+app-root {
+	display: flex;
+	flex-direction: column;
+	align-content: space-between;
+	min-height: 100vh;
+}
+
+main {
+	flex-grow: 1;
+}
+
+footer {
+	background-color: #f8f9fa;
+    padding: 5px 0;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+	margin-bottom: 1rem;
+}
+
+h1 {
+	text-align: center;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+a {
+	color: #0d6efd;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #0a58ca;
+	text-decoration: underline;
+}
+
+.panel {
+	background-color: #f8f9fa;
+	box-shadow: 2px 4px 4px rgba(0,0,0,0.2);
+	margin-top: 20px;
+	padding: 20px;
+}
+
+.card-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	list-style: none;
+	padding: 0;
+}
+
+.ship-card {
+	width: 33.3%;
+	box-shadow: 2px 4px 4px rgba(0,0,0,0.1);
+	padding: 10px;
+	border: 1px solid #eee;
+	margin-bottom: 20px;
+	position: relative;
+	margin-top: 60px;
+	padding-top: 40px;
+}
+
+.ship-card > img {
+	position: absolute;
+	width: 96px;
+	left: 50%;
+	top: 0;
+	transform: translate(-50%, -60%);
+	border-radius: 50%;
+	box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+}

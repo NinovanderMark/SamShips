@@ -8,6 +8,7 @@ using SamShips.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +29,8 @@ namespace SamShips.WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ResultResponse<List<ShipDto>>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("GET Ships was called");
@@ -40,6 +43,8 @@ namespace SamShips.WebAPI.Controllers
         }
 
         [HttpGet("{id}", Name = "GetById")]
+        [ProducesResponseType(typeof(ResultResponse<Ship>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetSingle([FromRoute] string id, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("GET Ship was called with id {ShipId}", id);
@@ -52,12 +57,14 @@ namespace SamShips.WebAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(ResultResponse<Ship>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ResultResponse<string>), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> AddShip([FromBody] ShipDto shipRequest, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("POST Ship was called");
 
             if (string.IsNullOrEmpty(shipRequest.Name))
-                return BadRequest(new BaseResponse(false));
+                return BadRequest(new ResultResponse<string>($"Field {nameof(shipRequest.Name)} is null or empty", false));
 
             try
             {

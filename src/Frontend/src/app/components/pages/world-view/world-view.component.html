@@ -1,0 +1,15 @@
+<div class="container panel">
+    <h1>World view</h1>
+    <p>Here you can see all the ships that are currently sailing the 7 seas. 
+        Visit the <a [routerLink]="'/my-ships'">My Ships</a> section to create your own, or manage the ships you already have.</p>
+    <ul class="card-list">
+        <li *ngFor="let ship of shipList" class="ship-card">
+            <img *ngIf="ship.class === 'Small'" src="/assets/small.png">
+            <img *ngIf="ship.class === 'Medium'" src="/assets/medium.png">
+            <img *ngIf="ship.class === 'Large'" src="/assets/large.png">
+            <h2>{{ship.name}}</h2>
+            <span>Type: {{ship.class}}</span><br/>
+            <span>Location: {{ship.location}}</span>
+        </li>
+    </ul>
+</div>

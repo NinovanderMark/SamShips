@@ -8,7 +8,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Handler: SamShips.WebAPI::SamShips.WebAPI.LambdaEntryPoint::FunctionHandlerAsync
-      CodeUri: s3://nino-aws-learning-bucket/898a1b630eaed8bf5ab13e85f618c4b6
+      CodeUri: s3://nino-aws-learning-bucket/d76c09e89491708207a172a5077d257b
       MemorySize: 256
       Timeout: 30
       Environment:
@@ -37,7 +37,7 @@ Resources:
     Properties:
       Runtime: dotnetcore3.1
       Handler: SamShips.Heartbeat::SamShips.Heartbeat.Entrypoint::Handler
-      CodeUri: s3://nino-aws-learning-bucket/c876fe6cf14ccdb03816fd856adf91c8
+      CodeUri: s3://nino-aws-learning-bucket/0c57e1a1bf3281f3757c4b8514f3472d
       Environment:
         Variables:
           TABLE_NAME:

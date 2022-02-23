@@ -43,6 +43,10 @@ namespace SamShips.WebAPI
             services.AddSingleton<IShipRepository, ShipRepository>();
             services.AddTransient<IShipFactory, ShipFactory>();
             services.AddSingleton<IAmazonDynamoDB, AmazonDynamoDBClient>();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => builder.AllowAnyOrigin());
+            });
 
             services.AddSwaggerGen(x =>
             {
@@ -65,6 +69,7 @@ namespace SamShips.WebAPI
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
