@@ -6,7 +6,7 @@ $projects = @(
 foreach ($project in $projects) {
     Write-Host "Creating package for $project" -ForegroundColor Green -BackgroundColor Black
 
-    dotnet lambda package -c Release -f "netcoreapp3.1" --project-location ".\src\SamShips\$project" --output-package ".\artifacts\$project.zip" 
+    dotnet lambda package -c Release -f "netcoreapp3.1" --project-location ".\src\Backend\$project" --output-package ".\artifacts\$project.zip" 
 }
 
 Write-Host "Packages updated, deploying stack..." -ForegroundColor Green -BackgroundColor Black
