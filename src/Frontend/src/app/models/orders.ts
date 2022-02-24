@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+export const Orderss = ['Docked', 'Trading', 'Piracy', 'Enforcement'] as const;
 export type Orders = 'Docked' | 'Trading' | 'Piracy' | 'Enforcement';
 
 export const Orders = {

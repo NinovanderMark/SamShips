@@ -17,23 +17,30 @@ export class ShipListComponent implements OnInit {
 
   ngOnInit(): void {
     this.shipIds = this.localStorage.getShipIds();
-    this.shipsService.shipDetailSubject.subscribe((data: Ship) => {
-      let existing = this.shipList.find(s => s.id);
-      if ( existing ) {
-        existing.cargo = data.cargo;
-        existing.hull = data.hull;
-        existing.name = data.name;
-        existing.orders = data.orders;
-        existing.location = data.location;
-        existing.name = data.name;
-      } else {
-        this.shipList.push(data);
-      }
-    });
+    this.shipsService.shipDetailSubject.subscribe((data: Ship) => this.handleShipDetail(data));
 
     this.shipIds.forEach(id => {
       this.shipsService.getById(id);
     });
+  }
+
+  handleShipDetail(data: Ship) {
+    if ( !data.id ) {
+      throw new Error("Ship retrieved has no ID");
+    }
+
+    let existing = this.shipList.find(s => s.id === data.id);
+    if ( existing ) {
+      existing.cargo = data.cargo;
+      existing.hull = data.hull;
+      existing.name = data.name;
+      existing.orders = data.orders;
+      existing.location = data.location;
+      existing.name = data.name;
+    } else {
+      this.shipList.push(data);
+      this.shipIds.push(data.id);
+    }
   }
 
 }

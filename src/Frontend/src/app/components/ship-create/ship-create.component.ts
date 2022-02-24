@@ -29,21 +29,21 @@ export class ShipCreateComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  createShip() {
+  async createShip() {
     let dto = new ShipDto();
     dto.name = this.createForm.get('nameControl')?.value;
     dto.location = this.createForm.get('locationControl')?.value;
     dto.class = this.createForm.get('typeControl')?.value;
 
-    this.shipsService.shipsPost(dto).subscribe((data: ShipResultResponse) => {
-      if ( data.result ) {
-        if ( data.result?.id ) {
-          this.localStorage.addShipId(data.result?.id)
-        }
-      } else {
-        throw new Error("Error occurred creating new Ship");
+    console.info("Creating new ship", dto);
+    let shipResult = await this.shipsService.shipsPost(dto);
+    if ( shipResult.result ) {
+      if ( shipResult.result?.id ) {
+        this.localStorage.addShipId(shipResult.result?.id)
       }
-    })
+    } else {
+      throw new Error("Error occurred creating new Ship");
+    }
   }
 
 }

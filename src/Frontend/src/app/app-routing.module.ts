@@ -9,7 +9,7 @@ import { ShipDetailComponent } from './components/ship-detail/ship-detail.compon
 const routes: Routes = [
   { path: 'my-ships', component: MyShipsComponent, children: [
     { path: 'create', component: ShipCreateComponent },
-    { path: 'detail', component: ShipDetailComponent }
+    { path: 'detail/:id', component: ShipDetailComponent }
   ]},
   { path: 'world', component: WorldViewComponent },
   { path: '**', component: HomeComponent }

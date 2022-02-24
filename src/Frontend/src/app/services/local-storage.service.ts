@@ -31,6 +31,7 @@ export class LocalStorageService {
   }
 
   addShipId(newId: string) {
+    console.info("Adding new Ship Id", newId);
     let idList = this.getShipIds();
     idList.push(newId);
     const newList = JSON.stringify(idList);

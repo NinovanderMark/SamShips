@@ -1,6 +1,6 @@
 import { HttpClient, HttpEvent, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { Observable, Subject, throwError } from 'rxjs';
+import { Observable, Subject, throwError, take, lastValueFrom } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { convertTypeAcquisitionFromJson } from 'typescript';
 import { Configuration } from '../models/configuration';
@@ -30,42 +30,58 @@ export class ShipsService {
             this.basePath = basePath || configuration.basePath || this.basePath;
         }
 
-        this.defaultHeaders.append('Accept', '*/*');
-        this.defaultHeaders.append('x-Is-Carlos-Awesome', 'true');
         this.shipDetailSubject = new Subject<Ship>();
     }
 
-    public getById(id: string): Observable<ShipResultResponse> {
-
+    public async getById(id: string): Promise<ShipResultResponse> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getById.');
         }
 
-        let observable = this.httpClient.get<ShipResultResponse>(`${this.basePath}/ships/${encodeURIComponent(String(id))}`);
+        let apiResult = this.httpClient.get<ShipResultResponse>(`${this.basePath}/ships/${encodeURIComponent(String(id))}`)
+            .pipe(take(1));
 
-        observable.subscribe((data: ShipResultResponse) => {
-            if ( data.success && data.result ) {
-            this.shipDetailSubject.next(data.result);
-            }
-        });
+        let shipResult = await lastValueFrom(apiResult);
+        if (!shipResult.success || !shipResult.result)
+            throw new Error(`Unable to retrieve ship ${id}`);
 
-        return observable;
+        this.shipDetailSubject.next(shipResult.result);
+        return shipResult;
     }
 
 
-    public shipsGet(): Observable<ShipDtoListResultResponse>{
-        return this.httpClient.request<ShipDtoListResultResponse>('get',`${this.basePath}/ships`);
+    public async shipsGet(): Promise<ShipDtoListResultResponse>{
+        let apiResult = this.httpClient.request<ShipDtoListResultResponse>('get',`${this.basePath}/ships`)
+            .pipe(take(1));
+
+        let shipResult = await lastValueFrom(apiResult);
+        if (!shipResult.success || !shipResult.result)
+            throw new Error("Unable to retrieve ships");
+
+        return shipResult;
     }
 
-    public shipsPost(body: ShipDto): Observable<ShipResultResponse> {
-        let observable = this.httpClient.post<ShipResultResponse>(`${this.basePath}/ships`, body, { headers: this.defaultHeaders });
+    public async shipsPost(body: ShipDto) : Promise<ShipResultResponse>{
+        let apiResult = this.httpClient.post<ShipResultResponse>(`${this.basePath}/ships`, body, { headers: this.defaultHeaders })
+            .pipe(take(1));
+        
+        let shipResult = await lastValueFrom(apiResult);
+        if ( !shipResult.success || !shipResult.result)
+            throw new Error(`Unable to save new ship ${body.name}`);
 
-        observable.subscribe((data: ShipResultResponse) => {
-            if ( data.success && data.result ) {
-                this.shipDetailSubject.next(data.result);
-            }
-        });
+        this.shipDetailSubject.next(shipResult.result);
+        return shipResult;
+    }
 
-        return observable;
+    public async shipPatch(body: Ship) : Promise<ShipResultResponse> {
+        let apiResult = this.httpClient.patch<ShipResultResponse>(`${this.basePath}/ships/${body.id}`, body, { headers: this.defaultHeaders })
+            .pipe(take(1));
+        
+        let shipResult = await lastValueFrom(apiResult);
+        if ( !shipResult.success || !shipResult.result)
+            throw new Error(`Unable to update ship ${body.id}`);
+
+        this.shipDetailSubject.next(shipResult.result);
+        return shipResult;
     }
 }

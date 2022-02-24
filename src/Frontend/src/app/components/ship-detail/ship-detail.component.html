@@ -1,1 +1,42 @@
-<p>ship-detail works!</p>
+<form [formGroup]="updateForm" (ngSubmit)="updateShip()" *ngIf="ship">
+    <div class="row">
+        <div class="mb-3 col-md-9">
+            <label for="form-name-control" class="form-label">Ship name</label>
+            <input class="form-control" type="text" id="form-name-control" formControlName="nameControl">
+        </div>
+
+        <div class="mb-3 col-md-3">
+            <label for="exampleFormControlInput1" class="form-label">Class</label>
+            <input class="form-control" id="form-type-control" formControlName="typeControl">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-6">
+            <label for="form-location-control" class="form-label">Location</label>
+            <select class="form-control" id="form-location-control" formControlName="locationControl">
+                <option *ngFor="let type of regions" [value]="type">{{type}}</option>
+            </select>
+        </div>
+
+
+        <div class="mb-3 col-md-6">
+            <label for="form-orders-control" class="form-label">Orders</label>
+            <select class="form-control" id="form-orders-control" formControlName="orderControl">
+                <option *ngFor="let type of orders" [value]="type">{{type}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <p>Hull: {{getHull()}} / {{getMaximumHull()}}</p>
+            <p>Cargo capacity: {{ship.cargoCapacity}}</p>
+        </div>
+    </div>
+
+	<div class="mb-3">
+		<button type="submit" class="btn btn-primary mb-3" [disabled]="true">Update</button>
+        <!-- <button type="submit" class="btn btn-primary mb-3" [disabled]="!updateForm.valid">Update</button> -->
+	</div>
+</form>

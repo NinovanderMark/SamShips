@@ -13,19 +13,17 @@ export class WorldViewComponent implements OnInit {
   public shipList : Array<ShipDto> = [];
   constructor(private shipsService : ShipsService) { }
 
-  ngOnInit(): void {
-    this.shipsService.shipsGet()
-      .subscribe((data: ShipDtoListResultResponse) => {
-        if ( data.result !== null) {
-          this.shipList = new Array<ShipDto>();
-          data.result?.forEach(s => {
-            console.debug(s);
-            this.shipList.push(s);
-          });
-          console.debug(this.shipList);
-        } else {
-          throw new Error("No ship list received");
-        }
+  async ngOnInit(): Promise<void> {
+    let ships = await this.shipsService.shipsGet();
+    if ( ships.result !== null) {
+      this.shipList = new Array<ShipDto>();
+      ships.result?.forEach(s => {
+        console.debug(s);
+        this.shipList.push(s);
       });
+      console.debug(this.shipList);
+    } else {
+      throw new Error("No ship list received");
+    }
   }
 }

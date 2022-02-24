@@ -23,7 +23,8 @@ main {
 
 footer {
 	background-color: #f8f9fa;
-    padding: 5px 0;
+	padding: 5px 0;
+	margin-top: 20px;
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
@@ -38,12 +39,17 @@ p:last-child {
 	margin-bottom: 0;
 }
 
-a {
+a, a:hover {
+	color: initial;
+	text-decoration: none;
+}
+
+p > a {
 	color: #0d6efd;
 	text-decoration: none;
 }
 
-a:hover {
+p > a:hover {
 	color: #0a58ca;
 	text-decoration: underline;
 }
@@ -55,16 +61,19 @@ a:hover {
 	padding: 20px;
 }
 
+/* Ship Cards */
+
 .card-list {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	list-style: none;
 	padding: 0;
+	justify-content: space-between;
 }
 
 .ship-card {
-	width: 33.3%;
+	width: 100%;
 	box-shadow: 2px 4px 4px rgba(0,0,0,0.1);
 	padding: 10px;
 	border: 1px solid #eee;
@@ -99,8 +108,19 @@ a:hover {
 	background-color: #fff;
 }
 
+.ship-card-small:hover {
+	background-color: #def;
+	box-shadow: 2px 4px 4px rgba(0,0,0,0.2);
+}
+
 .ship-card-small > img {
 	width: 48px;
 	margin-right: 20px;
 	float: left;
+}
+
+@media only screen and (min-width: 992px) {
+	.ship-card {
+		width: calc(33.333% - 15px);
+	}
 }
