@@ -16,6 +16,9 @@ Resources:
           TABLE_NAME:
             Ref: SamShipsTable
       Policies: AmazonDynamoDBFullAccess
+      AutoPublishAlias: SamShipsWebAPIAlias
+      DeploymentPreference:
+        Type: AllAtOnce
       Events:
         Ships:
           Type: Api
@@ -33,8 +36,17 @@ Resources:
       Runtime: dotnetcore3.1
       Handler: SamShips.Heartbeat::SamShips.Heartbeat.Entrypoint::Handler
       CodeUri: s3://nino-aws-learning-bucket/0c57e1a1bf3281f3757c4b8514f3472d
+      AutoPublishAlias: SamShipsHeartbeatAlias
+      DeploymentPreference:
+        Type: AllAtOnce
       Environment:
         Variables:
           TABLE_NAME:
             Ref: SamShipsTable
       Policies: AmazonDynamoDBFullAccess
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"

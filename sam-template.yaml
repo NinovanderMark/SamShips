@@ -15,6 +15,9 @@ Resources:
         Variables:
           TABLE_NAME: !Ref SamShipsTable
       Policies: AmazonDynamoDBFullAccess
+      AutoPublishAlias: SamShipsWebAPIAlias
+      DeploymentPreference:
+        Type: AllAtOnce
       Events:
         Ships:
           Type: Api
@@ -32,6 +35,9 @@ Resources:
       Runtime: dotnetcore3.1
       Handler: SamShips.Heartbeat::SamShips.Heartbeat.Entrypoint::Handler
       CodeUri: ./artifacts/SamShips.Heartbeat.zip
+      AutoPublishAlias: SamShipsHeartbeatAlias
+      DeploymentPreference:
+        Type: AllAtOnce
       Environment:
         Variables:
           TABLE_NAME: !Ref SamShipsTable
@@ -41,3 +47,9 @@ Resources:
       #     Type: Schedule
       #     Properties:
       #       Schedule: rate(1 minute)
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
