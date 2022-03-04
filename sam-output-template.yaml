@@ -1,14 +1,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
 Resources:
   SamShipsTable:
     Type: AWS::Serverless::SimpleTable
   SamShipsWebAPI:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Handler: SamShips.WebAPI::SamShips.WebAPI.LambdaEntryPoint::FunctionHandlerAsync
-      CodeUri: s3://nino-aws-learning-bucket/9053e27adb2b79af7d1b83245a608a2d
+      CodeUri: s3://nino-samships-deployment/9053e27adb2b79af7d1b83245a608a2d
       MemorySize: 256
       Timeout: 30
       Environment:
@@ -33,9 +39,9 @@ Resources:
   SamShipsHeartbeat:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnetcore3.1
+      Runtime: dotnet6
       Handler: SamShips.Heartbeat::SamShips.Heartbeat.Entrypoint::Handler
-      CodeUri: s3://nino-aws-learning-bucket/0c57e1a1bf3281f3757c4b8514f3472d
+      CodeUri: s3://nino-samships-deployment/0c57e1a1bf3281f3757c4b8514f3472d
       AutoPublishAlias: SamShipsHeartbeatAlias
       DeploymentPreference:
         Type: AllAtOnce
@@ -44,9 +50,39 @@ Resources:
           TABLE_NAME:
             Ref: SamShipsTable
       Policies: AmazonDynamoDBFullAccess
-Globals:
-  Api:
-    Cors:
-      AllowMethods: "'*'"
-      AllowHeaders: "'*'"
-      AllowOrigin: "'*'"
+  SamShipsCdnUser:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: User that CloudFront uses to access S3
+  SamShipsCdn:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+        - DomainName: nino-samships-frontend.s3.eu-west-1.amazonaws.com
+          Id: samshipsFrontendS3
+          S3OriginConfig:
+            OriginAccessIdentity:
+              Fn::Join:
+              - /
+              - - origin-access-identity
+                - cloudfront
+                - Ref: SamShipsCdnUser
+        Enabled: 'true'
+        Comment: Frontend for SamShips
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          AllowedMethods:
+          - GET
+          - HEAD
+          - OPTIONS
+          TargetOriginId: samshipsFrontendS3
+          ForwardedValues:
+            QueryString: 'true'
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: allow-all
+        PriceClass: PriceClass_200
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: 'true'

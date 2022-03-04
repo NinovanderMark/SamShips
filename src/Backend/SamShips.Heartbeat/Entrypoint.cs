@@ -23,7 +23,8 @@ namespace SamShips.Heartbeat
             Startup.ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            _logger = serviceProvider.GetService<ILogger<Entrypoint>>();
+            _logger = serviceProvider.GetService<ILogger<Entrypoint>>()
+                ?? throw new Exception($"Service of type {nameof(ILogger)} could not be retrieved");
         }
 
         public async Task<Result> Handler(ILambdaContext context)
