@@ -6,15 +6,19 @@ Globals:
       AllowMethods: "'*'"
       AllowHeaders: "'*'"
       AllowOrigin: "'*'"
+Parameters:
+  FrontendBucketName:
+    Type: String
+    Default: nino-samships-frontend
 Resources:
   SamShipsTable:
     Type: AWS::Serverless::SimpleTable
   SamShipsWebAPI:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet6
+      Runtime: dotnetcore3.1
       Handler: SamShips.WebAPI::SamShips.WebAPI.LambdaEntryPoint::FunctionHandlerAsync
-      CodeUri: s3://nino-samships-deployment/9053e27adb2b79af7d1b83245a608a2d
+      CodeUri: s3://nino-samships-deployment/ba065b5480bfb8a7c8f79af2d7f01271
       MemorySize: 256
       Timeout: 30
       Environment:
@@ -39,9 +43,9 @@ Resources:
   SamShipsHeartbeat:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: dotnet6
+      Runtime: dotnetcore3.1
       Handler: SamShips.Heartbeat::SamShips.Heartbeat.Entrypoint::Handler
-      CodeUri: s3://nino-samships-deployment/0c57e1a1bf3281f3757c4b8514f3472d
+      CodeUri: s3://nino-samships-deployment/e6049f014550f3762bf903e3cf757500
       AutoPublishAlias: SamShipsHeartbeatAlias
       DeploymentPreference:
         Type: AllAtOnce
@@ -50,27 +54,62 @@ Resources:
           TABLE_NAME:
             Ref: SamShipsTable
       Policies: AmazonDynamoDBFullAccess
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Ref: FrontendBucketName
   SamShipsCdnUser:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
         Comment: User that CloudFront uses to access S3
+  FrontendBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      PolicyDocument:
+        Id: CloudfrontRead
+        Version: 2012-10-17
+        Statement:
+        - Sid: PublicReadForGetBucketObjects
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::Sub:
+              - arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${UserId}
+              - UserId:
+                  Ref: SamShipsCdnUser
+          Action: s3:GetObject
+          Resource:
+            Fn::Sub:
+            - arn:aws:s3:::${BucketName}/*
+            - BucketName:
+                Ref: FrontendBucket
+      Bucket:
+        Ref: FrontendBucket
   SamShipsCdn:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         Origins:
-        - DomainName: nino-samships-frontend.s3.eu-west-1.amazonaws.com
+        - DomainName:
+            Fn::Sub:
+            - ${BucketName}.s3.eu-west-1.amazonaws.com
+            - BucketName:
+                Ref: FrontendBucket
           Id: samshipsFrontendS3
           S3OriginConfig:
             OriginAccessIdentity:
-              Fn::Join:
-              - /
-              - - origin-access-identity
-                - cloudfront
-                - Ref: SamShipsCdnUser
+              Fn::Sub:
+              - origin-access-identity/cloudfront/${UserId}
+              - UserId:
+                  Ref: SamShipsCdnUser
         Enabled: 'true'
         Comment: Frontend for SamShips
+        CustomErrorResponses:
+        - ErrorCode: 404
+          ResponsePagePath: /index.html
+          ResponseCode: 200
         DefaultRootObject: index.html
         DefaultCacheBehavior:
           AllowedMethods:
@@ -86,3 +125,8 @@ Resources:
         PriceClass: PriceClass_200
         ViewerCertificate:
           CloudFrontDefaultCertificate: 'true'
+Outputs:
+  CloudFrontUser:
+    Description: The user that CloudFront attempts to use
+    Value:
+      Ref: SamShipsCdnUser

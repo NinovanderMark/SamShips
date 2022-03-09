@@ -15,7 +15,7 @@ import { BASE_PATH } from '../models/variables';
 })
 export class ShipsService {
 
-  protected basePath = 'https://w2v9rk215a.execute-api.eu-west-1.amazonaws.com/Stage';
+  protected basePath = 'https://vodbm64nja.execute-api.eu-west-1.amazonaws.com/Stage';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
 

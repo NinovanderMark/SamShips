@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 	<Nullable>enable</Nullable>
 	<WarningsAsErrors>CS8600;CS8602;CS8603;CS8613;CS8601;CS8625;CS8604;CS8618;CS8777</WarningsAsErrors>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
