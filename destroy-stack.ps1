@@ -1,1 +1,1 @@
-aws cloudformation delete-stack --stack-name nino-samships
+aws cloudformation delete-stack --stack-name samships
